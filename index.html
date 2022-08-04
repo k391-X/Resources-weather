@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <link rel="stylesheet" href="app.css">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Weather</title>
+    </head>
+    <body>
+        <div id="app">
+            <div class="col-md-4" style="color:tomato; border: 2px solid violet;">
+                <h4> Begin </h4>
+                <h4> Block Data Normal </h4>
+                <h4> City Name: {{city_name}}  </h4>
+                <h4> Clouds Number: {{clouds}} </h4>
+                <h4> Ob Time: {{ob_time}} </h4>
+                <h4> Timezone: {{timezone}} </h4>
+            </div>
+
+            <div class="col-md-4 blockDifferentNormal" style="color: green; border: 2px solid black;">
+                <h4> Begin 2 </h4>
+                <h4> Block Object Javascript </h4>
+                <h4> City Name: {{weatherObject['city_name']}}  </h4>
+                <h4> Clouds Number: {{weatherObject['clouds']}} </h4>
+                <h4> Ob Time: {{weatherObject['ob_time']}} </h4>
+                <h4> Timezone: {{weatherObject['timezone']}} </h4>
+            </div>
+
+            <div class="col-md-4 blockDifferentNormal" style="color: blue ;border: 2px solid brown;">
+                <h4> Begin 3 </h4>
+                <h4> Block Array Javascript </h4>
+                <h4> City Name: {{weatherObject['city_name']}}  </h4>
+                <h4> Clouds Number: {{weatherObject['clouds']}} </h4>
+                <h4> Ob Time: {{weatherObject['ob_time']}} </h4>
+                <h4> Timezone: {{weatherObject['timezone']}} </h4>
+            </div>
+
+        </div>
+
+        <script src="https://unpkg.com/vue@next"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+            Vue.createApp ({
+                data() {                    
+                    return {
+                        city_name: "",
+                        clouds: 0,
+                        ob_time: "",
+                        timezone: "",
+                        
+                        weatherObject: {
+                            city_name: '',
+                            clouds: 0,
+                            ob_time: '',
+                            timezone: ""
+                        },
+                        
+                        weatherArray: [
+                            { city_name : '' },
+                            { clouds : 0 },
+                            { ob_time : ''},
+                            { timezone : ''}
+                        ]
+                    }       
+
+                },
+                created() {
+                    this.getData()
+                },
+
+                watch: {
+                    city_name (value) {
+                        console.log(value);
+                    }
+                },
+
+                methods: {
+                    getData() {
+                        const options = {
+                            method: 'GET',
+                            url: 'https://weatherapi-com.p.rapidapi.com/current.json',
+                            params: {q: '<REQUIRED>'},
+                            headers: {
+                                'X-RapidAPI-Key': 'd5aef74c96msh7f21c3549b4f175p1c3e8bjsn98dc3888f790',
+                                'X-RapidAPI-Host': 'weatherapi-com.p.rapidapi.com'                            
+                            }
+                        };
+                        axios.request(options).then((response)=>{
+
+                            console.log(response.data);
+                            console.log(response.data.data[0]['city_name']);
+
+                            //Block Normal
+                            this.city_name = response.data.data[0]['city_name'];
+                            this.clouds = response.data.data[0]['clouds'];
+                            this.ob_time = response.data.data[0]['ob_time'];
+                            this.timezone = response.data.data[0]['timezone'];
+                                                      
+                            //Block Object
+                            this.weatherObject.city_name = response.data.data[0]['city_name'];
+                            this.weatherObject.clouds = response.data.data[0]['clouds'];
+                            this.weatherObject.ob_time = response.data.data[0]['ob_time'];
+                            this.weatherObject.timezone = response.data.data[0]['timezone'];
+                            
+                            //Block Array
+                            this.weatherArray['city_name'] = reponse.data.data[0]['city_name'];
+                            this.weatherArray['clouds'] = reponse.data.data[0]['clouds'];
+                            this.weatherArray['ob_time'] = reponse.data.data[0]['ob_time'];
+                            this.weatherArray['timezone'] = reponse.data.data[0]['timezone'];
+
+                        }).catch(function(err){
+                            console.log(err);
+                        })
+                    },
+                },
+                mounted() {
+                },
+            }).mount("#app");
+        </script>
+    </body>
+</html>
