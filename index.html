@@ -12,27 +12,33 @@
                 <h4> Begin </h4>
                 <h4> Block Data Normal </h4>
                 <h4> City Name: {{city_name}}  </h4>
-                <h4> Clouds Number: {{clouds}} </h4>
-                <h4> Ob Time: {{ob_time}} </h4>
+                <h4> Lon: {{lon}} </h4>
+                <h4> Lat: {{lat}} </h4>
                 <h4> Timezone: {{timezone}} </h4>
+                <h4> Country Code: {{country_code}} </h4>
+                <h4> State Code: {{state_code}} </h4>
             </div>
 
             <div class="col-md-4 blockDifferentNormal" style="color: green; border: 2px solid black;">
                 <h4> Begin 2 </h4>
                 <h4> Block Object Javascript </h4>
                 <h4> City Name: {{weatherObject['city_name']}}  </h4>
-                <h4> Clouds Number: {{weatherObject['clouds']}} </h4>
-                <h4> Ob Time: {{weatherObject['ob_time']}} </h4>
+                <h4> Lon: {{weatherObject['lon']}} </h4>
+                <h4> Lat: {{weatherObject['lat']}} </h4>  
                 <h4> Timezone: {{weatherObject['timezone']}} </h4>
+                <h4> Country Code: {{weatherObject['country_code']}} </h4>
+                <h4> State Code: {{weatherObject['state_code']}} </h4>
             </div>
 
             <div class="col-md-4 blockDifferentNormal" style="color: blue ;border: 2px solid brown;">
                 <h4> Begin 3 </h4>
                 <h4> Block Array Javascript </h4>
-                <h4> City Name: {{weatherObject['city_name']}}  </h4>
-                <h4> Clouds Number: {{weatherObject['clouds']}} </h4>
-                <h4> Ob Time: {{weatherObject['ob_time']}} </h4>
-                <h4> Timezone: {{weatherObject['timezone']}} </h4>
+                <h4> City Name: {{weatherArray[0]['city_name']}}  </h4>
+                <h4> Lon: {{weatherArray[1]['lon']}} </h4>
+                <h4> Lat: {{weatherArray[2]['lat']}} </h4>
+                <h4> Timezone: {{weatherArray[3]['timezone']}} </h4>
+                <h4> Country Code: {{weatherArray[4]['country_code']}} </h4>
+                <h4> State Code: {{weatherArray[5]['state_code']}} </h4>
             </div>
 
         </div>
@@ -43,23 +49,29 @@
             Vue.createApp ({
                 data() {                    
                     return {
-                        city_name: "",
-                        clouds: 0,
-                        ob_time: "",
-                        timezone: "",
+                        city_name: "city_name",
+                        lon: 0,
+                        lat: 0,
+                        timezone: "timezone",
+                        country_code: "country_code",
+                        state_code: "state_code",
                         
                         weatherObject: {
-                            city_name: '',
-                            clouds: 0,
-                            ob_time: '',
-                            timezone: ""
+                            city_name: "city_name",
+                            lon: 0,
+                            lat: 0,
+                            timezone: "timezone",
+                            country_code: "country_code",
+                            state_code: "state_code",
                         },
                         
                         weatherArray: [
-                            { city_name : '' },
-                            { clouds : 0 },
-                            { ob_time : ''},
-                            { timezone : ''}
+                            { city_name : 'city_name' },
+                            { lon : 0 },
+                            { lat : 0 },
+                            { timezone : 'timezone' },
+                            { country_code : 'country_code' },
+                            { state_code : 'state_code' }
                         ]
                     }       
 
@@ -78,35 +90,47 @@
                     getData() {
                         const options = {
                             method: 'GET',
-                            url: 'https://weatherapi-com.p.rapidapi.com/current.json',
-                            params: {q: '<REQUIRED>'},
+                            url: 'https://weatherbit-v1-mashape.p.rapidapi.com/forecast/minutely',
+                            params: {lat: '35.5', lon: '-78.5'},
                             headers: {
-                                'X-RapidAPI-Key': 'd5aef74c96msh7f21c3549b4f175p1c3e8bjsn98dc3888f790',
-                                'X-RapidAPI-Host': 'weatherapi-com.p.rapidapi.com'                            
+                                'X-RapidAPI-Key': '1ac090f248msh01381ead6efd684p169944jsnfb3a462eb82f',
+                                'X-RapidAPI-Host': 'weatherbit-v1-mashape.p.rapidapi.com'
                             }
                         };
-                        axios.request(options).then((response)=>{
+                        axios.request(options).then((response) =>{
 
                             console.log(response.data);
-                            console.log(response.data.data[0]['city_name']);
+                            console.log(response.data['city_name']);
+                            console.log(response.data['lon']);
+                            console.log(response.data['lat']);
+                            console.log(response.data['timezone']);
+                            console.log(response.data['country_code']);
+                            console.log(response.data['state_code']);
+
 
                             //Block Normal
-                            this.city_name = response.data.data[0]['city_name'];
-                            this.clouds = response.data.data[0]['clouds'];
-                            this.ob_time = response.data.data[0]['ob_time'];
-                            this.timezone = response.data.data[0]['timezone'];
-                                                      
+                            this.city_name = response.data['city_name'];
+                            this.lon = response.data['lon'];
+                            this.lat = response.data['lat'];
+                            this.timezone = response.data['timezone'];
+                            this.country_code = response.data['country_code'];
+                            this.state_code = response.data['state_code'];
+      
                             //Block Object
-                            this.weatherObject.city_name = response.data.data[0]['city_name'];
-                            this.weatherObject.clouds = response.data.data[0]['clouds'];
-                            this.weatherObject.ob_time = response.data.data[0]['ob_time'];
-                            this.weatherObject.timezone = response.data.data[0]['timezone'];
+                            this.weatherObject['city_name'] = response.data['city_name'];
+                            this.weatherObject['lon'] = response.data['lon'];
+                            this.weatherObject['lat'] = response.data['lat'];
+                            this.weatherObject['timezone'] = response.data['timezone'];
+                            this.weatherObject['country_code'] = response.data['country_code'];
+                            this.weatherObject['state_code'] = response.data['state_code'];
                             
                             //Block Array
-                            this.weatherArray['city_name'] = reponse.data.data[0]['city_name'];
-                            this.weatherArray['clouds'] = reponse.data.data[0]['clouds'];
-                            this.weatherArray['ob_time'] = reponse.data.data[0]['ob_time'];
-                            this.weatherArray['timezone'] = reponse.data.data[0]['timezone'];
+                            this.weatherArray[0]['city_name'] = response.data['city_name'];
+                            this.weatherArray[1]['lon'] = response.data['lon'];
+                            this.weatherArray[2]['lat'] = response.data['lat'];
+                            this.weatherArray[3]['timezone'] = response.data['timezone'];
+                            this.weatherArray[4]['country_code'] = response.data['country_code'];
+                            this.weatherArray[5]['state_code'] = response.data['state_code'];
 
                         }).catch(function(err){
                             console.log(err);
